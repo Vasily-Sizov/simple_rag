@@ -6,11 +6,11 @@ import json
 import time
 
 from .services.document_processor import DocumentProcessor
-from .services.saiga_service import SaigaService
+from .services.mistral_service import MistralService
 from .metrics import request_latency, requests_total, update_metrics
 
 doc_processor = DocumentProcessor()
-saiga_service = SaigaService()
+mistral_service = MistralService()
 
 def index(request):
     return render(request, 'chat/index.html')
@@ -34,7 +34,7 @@ def chat(request):
             query = data.get('query')
             
             relevant_chunks = doc_processor.get_relevant_chunks(query)
-            response = saiga_service.generate_response(query, relevant_chunks)
+            response = mistral_service.generate_response(query, relevant_chunks)
             
             request_latency.observe(time.time() - start_time)
             update_metrics()
