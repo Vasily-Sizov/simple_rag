@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv/
+.env
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Hugging Face cache and models
+.cache/
+models/
+# Downloaded model weights
+*.bin
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# FAISS indexes
+*.index
+
+# PDF files
+*.pdf
+
+# Prometheus & Grafana
+grafana_data/
+
+# Poetry
+poetry.lock
+
+# Logs
+logs/
+*.log
+npm-debug.log* 

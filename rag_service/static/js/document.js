@@ -3,6 +3,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const chunksContainer = document.getElementById('chunks-container');
     const uploadStatus = document.getElementById('upload-status');
 
+    // Очищаем контейнер чанков и статус при загрузке страницы
+    chunksContainer.innerHTML = '';
+    uploadStatus.classList.add('d-none');
+    uploadStatus.textContent = '';
+
     pdfForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         

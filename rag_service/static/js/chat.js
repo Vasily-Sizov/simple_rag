@@ -3,8 +3,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const chatForm = document.getElementById('chat-form');
     const chatMessages = document.getElementById('chat-messages');
     const uploadStatus = document.getElementById('upload-status');
+    const uploadCardBody = pdfForm.closest('.card-body');
+    const chatCardBody = chatForm.closest('.card-body');
+    const chatUrl = chatCardBody.dataset.chatUrl;
+    const uploadUrl = uploadCardBody.dataset.uploadUrl;
     
-    let isPdfUploaded = false;
+    // Скрываем статус при загрузке страницы
+    uploadStatus.classList.add('d-none');
+    uploadStatus.textContent = '';
 
     // Обработка загрузки PDF
     pdfForm.addEventListener('submit', async function(e) {
@@ -19,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
             uploadStatus.textContent = 'Загрузка и обработка файла...';
             uploadStatus.classList.remove('d-none');
 
-            const response = await fetch('/upload-pdf/', {
+            const response = await fetch(uploadUrl, {
                 method: 'POST',
                 body: formData
             });
@@ -29,13 +35,14 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.status === 'success') {
                 uploadStatus.className = 'alert alert-success';
                 uploadStatus.textContent = 'Файл успешно загружен и обработан!';
-                isPdfUploaded = true;
+                localStorage.setItem('pdfUploaded', 'true');
             } else {
                 throw new Error('Ошибка загрузки файла');
             }
         } catch (error) {
             uploadStatus.className = 'alert alert-danger';
             uploadStatus.textContent = 'Ошибка при загрузке файла. Попробуйте еще раз.';
+            localStorage.removeItem('pdfUploaded');
         }
     });
 
@@ -43,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
     chatForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
-        if (!isPdfUploaded) {
+        if (!localStorage.getItem('pdfUploaded')) {
             alert('Пожалуйста, сначала загрузите PDF файл');
             return;
         }
@@ -64,20 +71,18 @@ document.addEventListener('DOMContentLoaded', function() {
         chatMessages.appendChild(loadingDiv);
 
         try {
-            const response = await fetch('/chat/', {
+            const response = await fetch(chatUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ 
-                    query: query
+                    query: query,
+                    use_doc: true
                 })
             });
 
             if (!response.ok) {
-                if (response.status === 499) {
-                    throw new Error('Запрос был прерван. Попробуйте еще раз.');
-                }
                 throw new Error(`Ошибка сервера: ${response.status}`);
             }
 
@@ -87,9 +92,9 @@ document.addEventListener('DOMContentLoaded', function() {
             loadingDiv.remove();
             
             // Добавляем контекст и ответ бота
-            addMessage(data.instruction, 'instruction', 'Инструкция');
-            addMessage(data.context.join('\n'), 'context', 'Контекст');
-            addMessage(data.question, 'user-question', 'Вопрос');
+            if (data.instruction) addMessage(data.instruction, 'instruction', 'Инструкция');
+            if (data.context) addMessage(data.context.join('\n'), 'context', 'Контекст');
+            if (data.question) addMessage(data.question, 'user-question', 'Вопрос');
             addMessage(data.answer, 'bot', 'Ответ');
         } catch (error) {
             loadingDiv.remove();
@@ -101,7 +106,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${type}-message`;
         
-        // Добавляем заголовок блока
         if (label) {
             const labelDiv = document.createElement('div');
             labelDiv.className = 'message-label';

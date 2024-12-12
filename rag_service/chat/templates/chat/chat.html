@@ -1,0 +1,36 @@
+{% extends 'chat/base.html' %}
+
+{% block title %}Чат | Mistral Chat{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-lg-10 offset-lg-1">
+            <h1 class="text-center mb-4">Чат с Mistral</h1>
+            
+            <!-- Чат -->
+            <div class="card">
+                <div class="card-body" data-chat-url="{% url 'chat-response' %}">
+                    <div id="chat-messages" class="chat-messages mb-3">
+                        <div class="system-message">
+                            Задайте любой вопрос модели Mistral.
+                        </div>
+                    </div>
+                    
+                    <form id="chat-form">
+                        <div class="input-group">
+                            <input type="text" id="user-input" class="form-control" 
+                                   placeholder="Введите ваш вопрос..." required>
+                            <button type="submit" class="btn btn-primary">Отправить</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/simple_chat.js"></script>
+{% endblock %} 

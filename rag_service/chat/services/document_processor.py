@@ -4,9 +4,13 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 import torch
+import logging
+
+logger = logging.getLogger('chat')
 
 class DocumentProcessor:
     def __init__(self):
+        logger.info("Инициализация DocumentProcessor")
         self.text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=300,
             chunk_overlap=100,
@@ -20,20 +24,26 @@ class DocumentProcessor:
         self.vector_store = None
 
     def process_pdf(self, pdf_file) -> None:
-        pdf_reader = pypdf.PdfReader(pdf_file)
-        text = ""
-        for page in pdf_reader.pages:
-            text += page.extract_text()
-        
-        text = text.replace('\n', ' ').replace('  ', ' ')
-        
-        chunks = self.text_splitter.split_text(text)
-        
-        chunks = [chunk for chunk in chunks if 15 <= len(chunk.split()) <= 100]
-        
-        self.vector_store = FAISS.from_texts(chunks, self.embeddings)
-        
-        return chunks
+        logger.info(f"Начало обработки PDF файла: {pdf_file.name}")
+        try:
+            pdf_reader = pypdf.PdfReader(pdf_file)
+            text = ""
+            for page in pdf_reader.pages:
+                text += page.extract_text()
+            
+            text = text.replace('\n', ' ').replace('  ', ' ')
+            
+            chunks = self.text_splitter.split_text(text)
+            logger.info(f"PDF успешно разбит на {len(chunks)} чанков")
+            
+            chunks = [chunk for chunk in chunks if 15 <= len(chunk.split()) <= 100]
+            
+            self.vector_store = FAISS.from_texts(chunks, self.embeddings)
+            
+            return chunks
+        except Exception as e:
+            logger.error(f"Ошибка при обработке PDF: {str(e)}", exc_info=True)
+            raise
 
     def get_relevant_chunks(self, query: str, k: int = 3) -> List[str]:
         if not self.vector_store:

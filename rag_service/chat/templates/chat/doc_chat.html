@@ -1,14 +1,16 @@
 {% extends 'chat/base.html' %}
 
+{% block title %}Чат с документом | Mistral Chat{% endblock %}
+
 {% block content %}
-<div class="container mt-5">
+<div class="container-fluid py-4">
     <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <h1 class="text-center mb-4">RAG Chat</h1>
+        <div class="col-lg-10 offset-lg-1">
+            <h1 class="text-center mb-4">Чат с документом</h1>
             
             <!-- Загрузка PDF -->
             <div class="card mb-4">
-                <div class="card-body">
+                <div class="card-body" data-upload-url="{% url 'upload-pdf' %}">
                     <h5 class="card-title">Загрузите PDF документ</h5>
                     <form id="pdf-upload-form" class="mb-3">
                         <div class="mb-3">
@@ -22,7 +24,9 @@
 
             <!-- Чат -->
             <div class="card">
-                <div class="card-body">
+                <div class="card-body" 
+                     data-chat-url="{% url 'chat-response' %}"
+                     data-upload-url="{% url 'upload-pdf' %}">
                     <div id="chat-messages" class="chat-messages mb-3">
                         <div class="system-message">
                             Загрузите PDF файл и задайте вопрос по его содержимому.
