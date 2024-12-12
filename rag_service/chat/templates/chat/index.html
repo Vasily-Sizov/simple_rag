@@ -1,0 +1,48 @@
+{% extends 'chat/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1 class="text-center mb-4">RAG Chat</h1>
+            
+            <!-- Загрузка PDF -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Загрузите PDF документ</h5>
+                    <form id="pdf-upload-form" class="mb-3">
+                        <div class="mb-3">
+                            <input type="file" class="form-control" id="pdf-file" accept=".pdf" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Загрузить</button>
+                    </form>
+                    <div id="upload-status" class="alert d-none"></div>
+                </div>
+            </div>
+
+            <!-- Чат -->
+            <div class="card">
+                <div class="card-body">
+                    <div id="chat-messages" class="chat-messages mb-3">
+                        <div class="system-message">
+                            Загрузите PDF файл и задайте вопрос по его содержимому.
+                        </div>
+                    </div>
+                    
+                    <form id="chat-form">
+                        <div class="input-group">
+                            <input type="text" id="user-input" class="form-control" 
+                                   placeholder="Введите ваш вопрос..." required>
+                            <button type="submit" class="btn btn-primary">Отправить</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/chat.js"></script>
+{% endblock %} 

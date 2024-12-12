@@ -1,0 +1,35 @@
+{% extends 'chat/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Просмотр документа</h2>
+    
+    <!-- Загрузка PDF -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Загрузите PDF документ</h5>
+            <form id="pdf-upload-form" class="mb-3">
+                <div class="mb-3">
+                    <input type="file" class="form-control" id="pdf-file" accept=".pdf" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Загрузить</button>
+            </form>
+            <div id="upload-status" class="alert d-none"></div>
+        </div>
+    </div>
+
+    <!-- Отображение чанков -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Чанки документа</h5>
+            <div id="chunks-container" class="chunks-list">
+                <!-- Чанки будут добавляться сюда динамически -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/document.js"></script>
+{% endblock %} 

@@ -1,0 +1,34 @@
+llm_rag_app/
+├── README.md
+├── pyproject.toml
+├── .gitignore
+├── requirements.txt
+├── rag_service/
+│   ├── manage.py
+│   ├── models/
+│   │   └── vikhr-llama/
+│   ├── rag_service/
+│   │   ├── __init__.py
+│   │   ├── settings.py
+│   │   ├── urls.py
+│   │   └── wsgi.py
+│   ├── chat/
+│   │   ├── __init__.py
+│   │   ├── apps.py
+│   │   ├── models.py
+│   │   ├── services/
+│   │   │   ├── __init__.py
+│   │   │   ├── document_processor.py
+│   │   │   ├── llm_service.py
+│   │   │   └── vector_store.py
+│   │   ├── templates/
+│   │   │   └── chat/
+│   │   │       ├── index.html
+│   │   │       └── chat.html
+│   │   ├── urls.py
+│   │   └── views.py
+│   └── static/
+│       ├── css/
+│       │   └── main.css
+│       └── js/
+│           └── chat.js 
